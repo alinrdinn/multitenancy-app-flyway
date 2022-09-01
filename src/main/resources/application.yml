@@ -1,0 +1,25 @@
+server:
+  port: 8088
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/db_microservice
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+multitenancy:
+  master:
+    # liquibase:
+    #   changeLog: classpath:db/changelog/db.changelog-master.yaml
+    flyway:
+      locations: classpath:db/master_migration
+  tenant:
+    # liquibase:
+    #   changeLog: classpath:db/changelog/db.changelog-tenant.yaml
+    flyway:
+      locations: classpath:db/tenant_migration
