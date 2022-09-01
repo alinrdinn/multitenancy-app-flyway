@@ -1,5 +1,7 @@
 package com.ali.multitenant.management.service;
 
+import java.nio.charset.StandardCharsets;
+
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.ali.multitenant.management.domain.entity.Tenant;
 import com.ali.multitenant.management.repository.TenantRepository;
+import com.google.common.hash.Hashing;
 
 @RequiredArgsConstructor
 @Service
@@ -25,28 +28,28 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     private final FlywayProperties flywayProperties;
     private final TenantRepository tenantRepository;
 
-    private static final String VALID_SCHEMA_NAME_REGEXP = "[A-Za-z0-9_]*";
+    private static final String VALID_TENANTID_NAME_REGEXP = "[A-Za-z0-9_]*";
 
     @Override
-    public void createTenant(String tenantId, String schema) {
-
-        // Verify schema string to prevent SQL injection
-        if (!schema.matches(VALID_SCHEMA_NAME_REGEXP)) {
-            throw new TenantCreationException("Invalid schema name: " + schema);
+    public void createTenant(Tenant tenant) {
+        Integer randomNumber = (int) Math.random() * 38;
+        String tenantId = Hashing.sha256()
+            .hashString(tenant.getEmail()+tenant.getPassword(), StandardCharsets.UTF_8)
+            .toString().substring(randomNumber, randomNumber + 25);
+        // Verify tenant ID to prevent SQL injection
+        if (!tenantId.matches(VALID_TENANTID_NAME_REGEXP)) {
+            throw new TenantCreationException("Invalid tenant id: " + tenantId);
         }
 
         try {
-            createSchema(schema);
-            runFlyway(dataSource, schema);
+            createSchema(tenantId);
+            runFlyway(dataSource, tenantId);
         } catch (DataAccessException e) {
-            throw new TenantCreationException("Error when creating schema: " + schema, e);
+            throw new TenantCreationException("Error when creating schema: " + tenantId, e);
         } catch (FlywayException e) {
             throw new TenantCreationException("Error when populating schema: ", e);
         }
-        Tenant tenant = Tenant.builder()
-                .tenantId(tenantId)
-                .schema(schema)
-                .build();
+        tenant.setTenantId(tenantId);
         tenantRepository.save(tenant);
     }
 

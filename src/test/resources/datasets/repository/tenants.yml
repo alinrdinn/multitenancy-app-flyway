@@ -1,3 +1,0 @@
-public.tenant:
-  - tenant_id: tenant1
-    schema: tenant1_schema

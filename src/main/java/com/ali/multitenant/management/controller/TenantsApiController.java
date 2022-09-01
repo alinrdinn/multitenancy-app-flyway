@@ -5,9 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ali.multitenant.management.domain.entity.Tenant;
 import com.ali.multitenant.management.service.TenantManagementService;
 
 @RequiredArgsConstructor
@@ -18,8 +19,8 @@ public class TenantsApiController {
     private final TenantManagementService tenantManagementService;
 
     @PostMapping("/tenants")
-    public ResponseEntity<Void> createTenant(@RequestParam String tenantId, @RequestParam String schema) {
-        this.tenantManagementService.createTenant(tenantId, schema);
+    public ResponseEntity<Void> createTenant(@RequestBody Tenant tenant) {
+        this.tenantManagementService.createTenant(tenant);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

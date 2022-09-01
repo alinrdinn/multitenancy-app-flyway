@@ -19,10 +19,10 @@ public class Tenant {
     @Column(name = "tenant_id")
     private String tenantId;
 
-    // @Column(name = "organization_name")
-    // private String organizationName;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "schema")
-    private String schema;
+    @Column(name = "password")
+    private String password;
 
 }

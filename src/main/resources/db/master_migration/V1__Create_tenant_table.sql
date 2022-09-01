@@ -5,6 +5,7 @@
 CREATE TABLE "tenant"
 (
     tenant_id character varying(255) NOT NULL,
-    schema character varying(255),
+    email character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
     CONSTRAINT tenant_pkey PRIMARY KEY (tenant_id)
 )
