@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/db_microservice
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+multitenancy:
+  schema-cache:
+    maximumSize: 100
+    expireAfterAccess: 10
+  master:
+    repository:
+      packages: com.ali.multitenant.service.multitenancy.repository
+    entityManager:
+      packages: com.ali.multitenant.service.multitenancy.domain
+    flyway:
+      enabled: false
+  tenant:
+    repository:
+      packages: com.ali.multitenant.service.repository
+    entityManager:
+      packages: com.ali.multitenant.service.domain
+    flyway:
+      locations: classpath:db/tenant_migration
