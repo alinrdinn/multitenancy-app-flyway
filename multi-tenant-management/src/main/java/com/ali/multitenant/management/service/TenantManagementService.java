@@ -4,5 +4,7 @@ import com.ali.multitenant.management.domain.entity.Tenant;
 
 public interface TenantManagementService {
     
-    void createTenant(Tenant tenant);
+    Tenant createTenant(Tenant tenant);
+
+    Tenant updateTenant(Tenant updateTenant, String tenantId);
 }

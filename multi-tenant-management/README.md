@@ -2,33 +2,22 @@
 
 ## Overview  
 
-This app provides a simple rest interface for dynamically adding tenants.
+This app provides a simple rest interface for dynamically adding tenants. This app use FlywayDB for database migrations.
 
 ## Running the Multi Tenant Management Service
 
-Build the Multi Tenant Management executable:
-
-```
-mvn package
-```
-
-then start it as an simple java application:
-
-```
-java -jar  target/multi-tenant-management-0-SNAPSHOT.jar
-```
-or via maven
+Run via maven
 ```
 mvn spring-boot:run
 ```
 
 ## Testing the Multi Tenant Management Service
 
-Set up some different tenants:
+please configure you email for email verification. You can change the configs in src/main/resources/application.yml.
+Example for inserting tenant:
 
 ```
-curl -X POST "localhost:8088/tenants?tenantId=tenant1&schema=tenant1"
-curl -X POST "localhost:8088/tenants?tenantId=tenant2&schema=tenant2"
+curl -X POST -d '{"email":"nurdin@email.com", "password":"1234"}' localhost:8088/tenants
 ```
 
 ## Configuration

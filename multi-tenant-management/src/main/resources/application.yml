@@ -2,9 +2,22 @@ server:
   port: 8088
 spring:
   datasource:
+    # url: jdbc:postgresql://db.vofibmvukohhwuglyeqa.supabase.co/postgres
     url: jdbc:postgresql://localhost:5433/db_microservice
     username: postgres
+    # password: jw0zIK6BqClfSt1G
     password: postgres
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 
+    password: 
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true   
   jpa:
     properties:
       hibernate:
