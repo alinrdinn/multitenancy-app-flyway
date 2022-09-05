@@ -1,8 +1,12 @@
 package com.ali.multitenant.service.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -20,14 +24,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ali.multitenant.service.domain.entity.Employee;
+import com.ali.multitenant.service.domain.entity.VerificationCode;
+import com.ali.multitenant.service.services.EmailVerificationService;
 import com.ali.multitenant.service.services.EmployeeService;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/")
-public class ProductApiController {
+public class EmployeeController {
 
     private final EmployeeService employeeService;
+
+    private final EmailVerificationService emailVerificationService;
 
     @GetMapping(value = "/employees")
     public ResponseEntity<List<Employee>> getProducts() {
@@ -40,8 +48,16 @@ public class ProductApiController {
     }
 
     @PostMapping(value = "/employees")
-    public ResponseEntity<Employee> createProduct(@Valid @RequestBody Employee employee) {
-        return ResponseEntity.ok().body(employeeService.createEmployee(employee)) ;
+    public ResponseEntity<Employee> createProduct(@Valid @RequestBody Employee employee, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+        employee.setVerified(false);
+        Employee createdEmployee = employeeService.createEmployee(employee);
+        VerificationCode createdVerificationCode = this.emailVerificationService.createVerificationCode(createdEmployee);
+
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
+        int serverPort = request.getServerPort();
+        this.emailVerificationService.sendVerificationEmail(employee.getEmail(), createdVerificationCode, scheme + "://" + serverName + ":" + serverPort);
+        return ResponseEntity.ok().body(createdEmployee ) ;
     }
 
     @PutMapping(value = "/employees/{email}")

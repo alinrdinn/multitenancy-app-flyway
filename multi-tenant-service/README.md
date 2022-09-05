@@ -1,39 +1,21 @@
 # Multi Tenant Service
 
+## Overview  
+
+This app provides a simple rest interface for dynamically adding employee inside a tenant. This app use FlywayDB for database migrations.
+
 ## Running the Multi Tenant Service
 
-Build the Multi Tenant Service executable:
-
-```
-mvn package
-```
-
-then start it as an simple java application:
-
-```
-java -jar target/multi-tenant-service-0-SNAPSHOT.jar
-```
-or via maven
+Run via maven
 ```
 mvn spring-boot:run
 ```
 
 ## Testing the Multi Tenant Service
 
-Insert some test data for different tenants:
+Make sure you have already created tenant from multi-tenant-management service. Also, please configure you email for email verification. You can change the configs in src/main/resources/application.yml.
+Insert employee for different tenants:
 
 ```
-curl -H "X-TENANT-ID: tenant1" -H "Content-Type: application/se.callista.blog.service.api.product.v1_0+json" -X POST -d '{"name":"Product 1"}' localhost:8080/products
-curl -H "X-TENANT-ID: tenant2" -H "Content-Type: application/se.callista.blog.service.api.product.v1_0+json" -X POST -d '{"name":"Product 2"}' localhost:8080/products
+curl -H "X-TENANT-ID: feo454bo32oioi23" -X POST -d '{"email":"ali@email.com", "password":"1234"}' localhost:8080/employees
 ```
-
-Then query for the data, and verify that the data is properly isolated between tenants:
-
-```
-curl -H "X-TENANT-ID: tenant1" localhost:8080/products
-curl -H "X-TENANT-ID: tenant2" localhost:8080/products
-```
-
-## Configuration
-
-Change default port value and other settings in src/main/resources/application.yml.

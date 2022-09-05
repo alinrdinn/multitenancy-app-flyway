@@ -25,4 +25,7 @@ public class Tenant {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "verified")
+    private Boolean verified;
+
 }

@@ -5,6 +5,17 @@ spring:
     url: jdbc:postgresql://localhost:5433/db_microservice
     username: postgres
     password: postgres
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 
+    password: 
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true   
   jpa:
     properties:
       hibernate:

@@ -36,8 +36,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee updateEmployee(Employee employee, String email) {
         Employee employeeNeedToUpdate = employeeRepository.getById(email);
-        employeeNeedToUpdate.setEmail(employee.getEmail());
-        employeeNeedToUpdate.setPassword(employee.getPassword());
+        if(employee.getEmail() != null) {
+            employeeNeedToUpdate.setEmail(employee.getEmail());
+        }
+        if (employee.getPassword() != null) {
+            employeeNeedToUpdate.setPassword(employee.getPassword());
+        }
+        if (employee.getVerified() != employeeNeedToUpdate.getVerified()) {
+            employeeNeedToUpdate.setVerified(employee.getVerified());
+        }
         return employeeNeedToUpdate;
     }
 
